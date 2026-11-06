@@ -1,0 +1,198 @@
+/* =========================================================================
+   Siddarth AI Browser Assistant - Interactive Element Badges & Overlays
+   Slice 10: Non-intrusive DOM Scanner & Visual Badge Overlay
+   ========================================================================= */
+
+/* Top-level isolated badge container (clicks pass through to page elements) */
+#siddarth-badge-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 2147483647 !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-sizing: border-box !important;
+}
+
+/* Individual floating badge pinned to element coordinates */
+.siddarth-element-badge {
+  position: absolute !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  min-width: 20px !important;
+  height: 20px !important;
+  padding: 0 5px !important;
+  border-radius: 10px !important;
+  background: #4f46e5 !important; /* Default Indigo */
+  color: #ffffff !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: -0.2px !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45), 0 0 0 1.5px rgba(255, 255, 255, 0.95) !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  transform: translate(-6px, -10px) !important;
+  white-space: nowrap !important;
+  opacity: 1 !important;
+  transition: transform 0.12s ease-out, opacity 0.12s ease-out, background-color 0.12s ease !important;
+  cursor: default !important;
+}
+
+/* Color-coded badge roles for visual clarity */
+.siddarth-badge-input_text,
+.siddarth-badge-input_email,
+.siddarth-badge-input_number,
+.siddarth-badge-input_search,
+.siddarth-badge-input_tel,
+.siddarth-badge-input_url,
+.siddarth-badge-input {
+  background: #0284c7 !important; /* Sky Blue for text inputs */
+}
+
+.siddarth-badge-input_password {
+  background: #0369a1 !important; /* Deep Sky Blue for passwords */
+}
+
+.siddarth-badge-button,
+.siddarth-badge-role_button {
+  background: #4f46e5 !important; /* Indigo for buttons */
+}
+
+.siddarth-badge-link,
+.siddarth-badge-role_link {
+  background: #059669 !important; /* Emerald Green for links */
+}
+
+.siddarth-badge-select,
+.siddarth-badge-role_combobox,
+.siddarth-badge-role_listbox {
+  background: #7c3aed !important; /* Purple for dropdowns */
+}
+
+.siddarth-badge-textarea {
+  background: #0891b2 !important; /* Cyan for multiline text */
+}
+
+.siddarth-badge-input_checkbox,
+.siddarth-badge-input_radio,
+.siddarth-badge-role_checkbox,
+.siddarth-badge-role_radio {
+  background: #d97706 !important; /* Amber for toggles & checks */
+}
+
+.siddarth-badge-input_file {
+  background: #ea580c !important; /* Orange for file uploads */
+}
+
+/* Consequential Action Alert Badge (Submit, Pay, Buy, Delete, Remove) */
+.siddarth-badge-consequential {
+  background: #dc2626 !important; /* Crimson Red */
+  box-shadow: 0 0 0 2px #fecaca, 0 3px 8px rgba(220, 38, 38, 0.55) !important;
+  animation: siddarth-badge-pulse 2s infinite ease-in-out !important;
+}
+
+/* Pulsing Focus & Selection Highlight around active element */
+.siddarth-highlight-active {
+  outline: 3px solid #6366f1 !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.35) !important;
+  animation: siddarth-element-pulse 1.6s infinite ease-in-out !important;
+}
+
+@keyframes siddarth-badge-pulse {
+  0%, 100% {
+    transform: translate(-6px, -10px) scale(1);
+  }
+  50% {
+    transform: translate(-6px, -10px) scale(1.15);
+  }
+}
+
+@keyframes siddarth-element-pulse {
+  0%, 100% {
+    outline-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    outline-color: #a855f7;
+    box-shadow: 0 0 0 8px rgba(168, 85, 247, 0.25);
+  }
+}
+
+/* =========================================================================
+   Slice 11: Floating Target Pointer & Reason Tooltip (#siddarth-highlighter-pointer)
+   ========================================================================= */
+
+#siddarth-highlighter-pointer {
+  position: absolute !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 12px !important;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.45), 0 0 0 2px rgba(255, 255, 255, 0.95) !important;
+  z-index: 2147483647 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  white-space: nowrap !important;
+  animation: siddarth-pointer-float 1.8s infinite ease-in-out !important;
+  transition: top 0.15s ease-out, left 0.15s ease-out !important;
+}
+
+#siddarth-highlighter-pointer .pointer-target-icon {
+  font-size: 13px !important;
+  line-height: 1 !important;
+}
+
+#siddarth-highlighter-pointer .pointer-target-id {
+  background: rgba(255, 255, 255, 0.25) !important;
+  padding: 1px 5px !important;
+  border-radius: 4px !important;
+  font-weight: 800 !important;
+  font-size: 11px !important;
+}
+
+#siddarth-highlighter-pointer .pointer-target-reason {
+  color: #f1f5f9 !important;
+  font-size: 11.5px !important;
+}
+
+#siddarth-highlighter-pointer::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -6px !important;
+  left: 18px !important;
+  width: 0 !important;
+  height: 0 !important;
+  border-left: 6px solid transparent !important;
+  border-right: 6px solid transparent !important;
+  border-top: 6px solid #7c3aed !important;
+}
+
+@keyframes siddarth-pointer-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building Autonomous Browser Agents with Gemini 2.0 Flash - YouTube</title>
+  <meta name="title" content="Building Autonomous Browser Agents with Gemini 2.0 Flash">
+  <meta name="description" content="In this tech talk, we break down how to architect robust, safe in-browser AI agents using Chrome Manifest V3, Mozilla Readability, and Gemini 2.0 Flash-Lite.
+00:00 - Introduction & The Need for In-Browser Context
+01:45 - Architecture of Browser Extension Agents
+04:30 - Structured DOM Extraction vs Computer Vision
+08:15 - Human-in-the-Loop Approval Safeguards & Deterministic Rails
+12:40 - Live Interactive Demo & Element Badging
+16:20 - Conclusion & Production Deployment Roadmap">
+  <link itemprop="name" content="AI Engineering Hub">
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --card-bg: #1f1f1f;
+      --text: #f1f1f1;
+      --text-muted: #aaaaaa;
+      --accent: #3ea6ff;
+      --red: #ff0000;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Roboto, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+    header {
+      background-color: #212121;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #303030;
+    }
+    .yt-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+    }
+    .yt-icon {
+      width: 28px;
+      height: 20px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .yt-icon::after {
+      content: "";
+      border-style: solid;
+      border-width: 4px 0 4px 7px;
+      border-color: transparent transparent transparent white;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+    .player-container {
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .video-overlay-timer {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(0,0,0,0.75);
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-family: monospace;
+      font-size: 14px;
+      color: #3ea6ff;
+    }
+    .meta-container {
+      margin-top: 16px;
+    }
+    h1.ytd-watch-metadata {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 10px 0;
+      color: #fff;
+    }
+    .channel-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .channel-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #6366f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    .channel-info h4 {
+      margin: 0;
+      font-size: 15px;
+    }
+    .channel-info span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .description-box {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      line-height: 1.6;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+    .chapters-card {
+      margin-top: 16px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .chapter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(62, 166, 255, 0.15);
+      color: #3ea6ff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin: 4px;
+      cursor: pointer;
+      font-family: monospace;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="yt-logo">
+      <div class="yt-icon"></div>
+      <span>YouTube Practice Mock</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="player-container">
+      <video id="player-video" controls poster="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1600' height='900' viewBox='0 0 1600 900'><rect fill='%23111827' width='1600' height='900'/><text fill='%23818cf8' font-family='sans-serif' font-size='48' font-weight='bold' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle'>Building Autonomous Browser Agents</text></svg>">
+        <!-- Minimal dummy silent webm source -->
+        <source src="data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAAtsZGF0" type="video/mp4">
+      </video>
+      <div class="video-overlay-timer" id="overlay-timer">
+        Current Time: <span id="current-time-display">00:00</span> / 18:45
+      </div>
+    </div>
+
+    <div class="meta-container">
+      <h1 class="ytd-watch-metadata">
+        <yt-formatted-string id="video-title">Building Autonomous Browser Agents with Gemini 2.0 Flash</yt-formatted-string>
+      </h1>
+
+      <div class="channel-row">
+        <div class="channel-avatar">AI</div>
+        <div class="channel-info" id="channel-name">
+          <div id="text"><a href="#">AI Engineering Hub</a></div>
+          <span>254K subscribers</span>
+        </div>
+      </div>
+
+      <div class="description-box" id="description-inline-expander">
+In this deep-dive engineering masterclass, we explore the design and implementation of context-aware browser AI assistants. We analyze how Google Chrome Manifest V3 side panels, structured DOM element scanning, and human-in-the-loop safety rails create an entirely new paradigm for automated web interaction.
+
+TIMESTAMPS:
+00:00 - Introduction & The Need for In-Browser Context
+01:45 - Architecture of Browser Extension Agents
+04:30 - Structured DOM Extraction vs Computer Vision
+08:15 - Human-in-the-Loop Approval Safeguards & Deterministic Rails
+12:40 - Live Interactive Demo & Element Badging
+16:20 - Conclusion & Production Deployment Roadmap
+      </div>
+
+      <div class="chapters-card">
+        <h3>Interactive Chapter Jump Test</h3>
+        <p style="color: #aaa; font-size: 13px; margin-bottom: 10px;">Click any chapter to test seeking the video player directly:</p>
+        <div>
+          <span class="chapter-pill" onclick="seek(0)">00:00 Intro</span>
+          <span class="chapter-pill" onclick="seek(105)">01:45 Architecture</span>
+          <span class="chapter-pill" onclick="seek(270)">04:30 DOM vs Vision</span>
+          <span class="chapter-pill" onclick="seek(495)">08:15 Safeguards</span>
+          <span class="chapter-pill" onclick="seek(760)">12:40 Demo</span>
+          <span class="chapter-pill" onclick="seek(980)">16:20 Roadmap</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simulate YouTube video player state
+    const video = document.getElementById('player-video');
+    const timeDisplay = document.getElementById('current-time-display');
+
+    // Simulate mock duration: 18 minutes 45 seconds (1125 seconds)
+    Object.defineProperty(video, 'duration', {
+      value: 1125,
+      writable: true,
+      configurable: true
+    });
+
+    function formatTime(secs) {
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60);
+      return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    video.addEventListener('timeupdate', () => {
+      if (timeDisplay) timeDisplay.textContent = formatTime(video.currentTime);
+    });
+
+    window.seek = function(seconds) {
+      video.currentTime = seconds;
+      if (timeDisplay) timeDisplay.textContent = formatTime(seconds);
+    };
+
+    // Embed mock ytInitialPlayerResponse with timed captions
+    window.ytInitialPlayerResponse = {
+      videoDetails: {
+        videoId: 'dQw4w9WgXcQ',
+        title: 'Building Autonomous Browser Agents with Gemini 2.0 Flash',
+        author: 'AI Engineering Hub',
+        lengthSeconds: '1125'
+      },
+      captions: {
+        playerCaptionsTracklistRenderer: {
+          captionTracks: [
+            {
+              baseUrl: 'https://www.youtube.com/api/timedtext?v=dQw4w9WgXcQ&lang=en',
+              name: { simpleText: 'English (auto-generated)' },
+              languageCode: 'en',
+              kind: 'asr',
+              isTranslatable: true
+            }
+          ]
+        }
+      }
+    };
+  </script>
+</body>
+</html>
+

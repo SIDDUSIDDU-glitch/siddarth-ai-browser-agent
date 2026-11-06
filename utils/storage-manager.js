@@ -34,11 +34,54 @@ export const DEFAULT_TOKEN_USAGE = {
 
 export const DEFAULT_PROFILE = {
   name: '',
+  email: '',
+  phone: '',
   college: '',
+  degree: '',
   skills: '',
   links: '',
+  bio: '',
   preferredTone: 'Professional and concise'
 };
+
+export const DEFAULT_SKILLS = [
+  {
+    id: 'skill_exam_notes',
+    name: 'Exam notes',
+    description: 'Extract high-yield exam notes, core definitions, formulas, and 5 likely exam questions.',
+    promptTemplate: 'Analyze this page and generate comprehensive exam revision notes: 1. Core Concepts & Definitions, 2. Important Formulas / Key Takeaways, 3. Top 5 Likely Exam Questions with Detailed Answers.',
+    targetTab: 'chat',
+    isBuiltIn: true,
+    createdAt: 1700000000000
+  },
+  {
+    id: 'skill_explain_hinglish',
+    name: 'Explain in Hinglish',
+    description: 'Explain the page content simply in conversational Roman Hinglish with relatable everyday examples.',
+    promptTemplate: 'Is page ke content ko simple aur easy-to-understand conversational Roman Hinglish mein explain karo. Complex technical terms ko everyday life examples ke saath samjhao.',
+    targetTab: 'chat',
+    isBuiltIn: true,
+    createdAt: 1700000000001
+  },
+  {
+    id: 'skill_reply_email',
+    name: 'Reply to this email politely',
+    description: 'Draft a polite, professional, and well-structured email reply addressing all key points.',
+    promptTemplate: 'Based on the email or message content on this page, draft a polite, professional, and well-structured reply. Address each question or point clearly, keeping a warm yet professional tone.',
+    targetTab: 'chat',
+    isBuiltIn: true,
+    createdAt: 1700000000002
+  },
+  {
+    id: 'skill_fill_form',
+    name: 'Fill form from profile',
+    description: 'Automatically fill out the web form on this page using local profile memory.',
+    promptTemplate: 'Fill out this form using my local profile memory',
+    targetTab: 'agent',
+    isBuiltIn: true,
+    createdAt: 1700000000003
+  }
+];
 
 /**
  * Get item from chrome.storage.local
@@ -118,15 +161,149 @@ export async function saveProfile(partialProfile) {
   return updated;
 }
 
+export async function clearProfile() {
+  await setStorageItem(STORAGE_KEYS.PROFILE, { ...DEFAULT_PROFILE });
+  return { ...DEFAULT_PROFILE };
+}
+
 /**
- * Saved Skills helpers
+ * Saved Skills helpers (Slice 15: One-Click Skills Import & Export)
  */
 export async function getSkills() {
-  return await getStorageItem(STORAGE_KEYS.SKILLS, []);
+  const stored = await getStorageItem(STORAGE_KEYS.SKILLS, null);
+  if (!stored || !Array.isArray(stored) || stored.length === 0) {
+    await setStorageItem(STORAGE_KEYS.SKILLS, DEFAULT_SKILLS);
+    return DEFAULT_SKILLS.map(s => ({ ...s }));
+  }
+  return stored;
 }
 
 export async function saveSkills(skillsArray) {
-  return await setStorageItem(STORAGE_KEYS.SKILLS, skillsArray);
+  await setStorageItem(STORAGE_KEYS.SKILLS, skillsArray);
+  return skillsArray;
+}
+
+export async function addOrUpdateSkill(skillData) {
+  if (!skillData || !skillData.name || !skillData.name.trim()) {
+    throw new Error('Skill name is required.');
+  }
+  if (!skillData.promptTemplate || !skillData.promptTemplate.trim()) {
+    throw new Error('Skill prompt template is required.');
+  }
+
+  const currentSkills = await getSkills();
+  const id = skillData.id || `skill_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  const skillToSave = {
+    id,
+    name: skillData.name.trim(),
+    description: (skillData.description || '').trim(),
+    promptTemplate: skillData.promptTemplate.trim(),
+    targetTab: skillData.targetTab === 'agent' ? 'agent' : 'chat',
+    isBuiltIn: Boolean(skillData.isBuiltIn),
+    createdAt: skillData.createdAt || Date.now(),
+    updatedAt: Date.now()
+  };
+
+  const existingIndex = currentSkills.findIndex(s => s.id === id);
+  let updatedSkills;
+  if (existingIndex >= 0) {
+    updatedSkills = [...currentSkills];
+    updatedSkills[existingIndex] = { ...currentSkills[existingIndex], ...skillToSave };
+  } else {
+    updatedSkills = [...currentSkills, skillToSave];
+  }
+
+  await saveSkills(updatedSkills);
+  return { skill: skillToSave, skills: updatedSkills };
+}
+
+export async function deleteSkill(skillId) {
+  const currentSkills = await getSkills();
+  const updatedSkills = currentSkills.filter(s => s.id !== skillId);
+  await saveSkills(updatedSkills);
+  return updatedSkills;
+}
+
+export async function resetSkillsToDefault() {
+  const cloned = DEFAULT_SKILLS.map(s => ({ ...s }));
+  await saveSkills(cloned);
+  return cloned;
+}
+
+export async function exportSkillsAsJson() {
+  const skills = await getSkills();
+  const payload = {
+    version: '1.0',
+    exportedAt: new Date().toISOString(),
+    source: 'Siddarth AI Browser Agent',
+    skillsCount: skills.length,
+    skills
+  };
+  return JSON.stringify(payload, null, 2);
+}
+
+export async function importSkillsFromJson(jsonString, options = { merge: true }) {
+  if (!jsonString || typeof jsonString !== 'string') {
+    throw new Error('Invalid JSON input: text content required.');
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(jsonString.trim());
+  } catch (err) {
+    throw new Error(`Invalid JSON syntax: ${err.message}`);
+  }
+
+  const skillsToImport = Array.isArray(parsed) ? parsed : (Array.isArray(parsed?.skills) ? parsed.skills : null);
+  if (!skillsToImport || !Array.isArray(skillsToImport)) {
+    throw new Error('Invalid skills schema: expected an array or an object containing a "skills" array.');
+  }
+
+  if (skillsToImport.length === 0) {
+    throw new Error('Skills file is empty. No skills found to import.');
+  }
+
+  const sanitized = [];
+  for (let i = 0; i < skillsToImport.length; i++) {
+    const item = skillsToImport[i];
+    if (!item || typeof item !== 'object') continue;
+    const name = String(item.name || '').trim();
+    const promptTemplate = String(item.promptTemplate || '').trim();
+    if (!name || !promptTemplate) {
+      throw new Error(`Skill at index ${i} is missing required "name" or "promptTemplate".`);
+    }
+
+    sanitized.push({
+      id: item.id || `skill_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      name,
+      description: String(item.description || '').trim(),
+      promptTemplate,
+      targetTab: item.targetTab === 'agent' ? 'agent' : 'chat',
+      isBuiltIn: Boolean(item.isBuiltIn),
+      createdAt: item.createdAt || Date.now(),
+      updatedAt: Date.now()
+    });
+  }
+
+  const currentSkills = await getSkills();
+  let finalSkills;
+
+  if (options.merge) {
+    const skillMap = new Map();
+    currentSkills.forEach(s => skillMap.set(s.id, s));
+    sanitized.forEach(s => skillMap.set(s.id, s));
+    finalSkills = Array.from(skillMap.values());
+  } else {
+    finalSkills = sanitized;
+  }
+
+  await saveSkills(finalSkills);
+  return {
+    success: true,
+    importedCount: sanitized.length,
+    totalCount: finalSkills.length,
+    skills: finalSkills
+  };
 }
 
 /**
@@ -174,6 +351,20 @@ export async function appendActionLog(logEntry) {
 
 export async function clearActionLogs() {
   return await setStorageItem(STORAGE_KEYS.LOGS, []);
+}
+
+export async function exportActionLogsAsJson() {
+  const logs = await getActionLogs();
+  return JSON.stringify(logs, null, 2);
+}
+
+export async function getDryRunMode() {
+  const settings = await getSettings();
+  return Boolean(settings.dryRunMode);
+}
+
+export async function setDryRunMode(enabled) {
+  return await saveSettings({ dryRunMode: Boolean(enabled) });
 }
 
 /**

@@ -16,6 +16,8 @@
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -26,12 +28,12 @@
       overflow-x: hidden;
     }
     header {
-      padding: 24px 40px;
+      padding: 20px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--card-border);
-      background: rgba(11, 15, 25, 0.8);
+      background: rgba(11, 15, 25, 0.85);
       backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
@@ -46,11 +48,15 @@
       letter-spacing: -0.5px;
     }
     .brand img { width: 32px; height: 32px; border-radius: 8px; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
     .nav-links a {
       color: var(--text-muted);
       text-decoration: none;
-      margin-left: 24px;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 500;
       transition: color 0.2s;
     }
@@ -58,7 +64,7 @@
     .btn {
       background: var(--accent);
       color: #fff;
-      padding: 9px 18px;
+      padding: 8px 16px;
       border-radius: 8px;
       text-decoration: none;
       font-weight: 600;
@@ -77,6 +83,8 @@
       color: var(--text);
     }
     .btn-outline:hover { background: #1e293b; border-color: #334155; box-shadow: none; }
+    .btn-success { background: #059669; }
+    .btn-success:hover { background: #047857; }
 
     /* Hero Section */
     .hero {
@@ -99,7 +107,7 @@
       margin-bottom: 24px;
     }
     .hero h1 {
-      font-size: 48px;
+      font-size: 46px;
       font-weight: 800;
       line-height: 1.15;
       margin-bottom: 20px;
@@ -108,15 +116,17 @@
       -webkit-text-fill-color: transparent;
     }
     .hero p {
-      font-size: 18px;
+      font-size: 17px;
       color: var(--text-muted);
-      max-width: 760px;
+      max-width: 780px;
       margin: 0 auto 32px;
+      line-height: 1.6;
     }
     .hero-actions {
       display: flex;
       justify-content: center;
       gap: 16px;
+      flex-wrap: wrap;
       margin-bottom: 50px;
     }
 
@@ -159,8 +169,8 @@
     }
     .simulator-body {
       display: grid;
-      grid-template-columns: 1fr 380px;
-      min-height: 520px;
+      grid-template-columns: 1fr 390px;
+      min-height: 540px;
       background: #f8fafc;
       color: #0f172a;
     }
@@ -170,27 +180,43 @@
     .sim-article {
       padding: 32px;
       overflow-y: auto;
-      max-height: 520px;
+      max-height: 540px;
     }
     .sim-article h2 { font-size: 24px; margin-bottom: 8px; color: #0f172a; }
     .sim-article .meta { font-size: 12px; color: #64748b; margin-bottom: 20px; }
     .sim-article p { font-size: 15px; line-height: 1.7; margin-bottom: 16px; color: #334155; }
+    
     .sim-sidepanel {
       background: #0f172a;
       border-left: 1px solid #334155;
       color: #f8fafc;
       display: flex;
       flex-direction: column;
-      max-height: 520px;
+      max-height: 540px;
       overflow-y: auto;
     }
-    .sim-sidepanel-header {
-      padding: 12px 16px;
-      background: #1e293b;
-      border-bottom: 1px solid #334155;
+    .sim-tabs-nav {
+      background: #111827;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+    .sim-tab-btn {
+      flex: 1;
+      padding: 10px 4px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #94a3b8;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .sim-tab-btn.active {
+      color: #fff;
+      border-bottom-color: var(--accent);
+      background: rgba(255, 255, 255, 0.03);
     }
     .sim-sidepanel-content {
       padding: 16px;
@@ -209,10 +235,10 @@
       background: #6366f1;
       color: white;
       border: none;
-      padding: 10px;
+      padding: 9px;
       border-radius: 6px;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 12.5px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -222,13 +248,13 @@
     }
     .sim-btn:hover { background: #4f46e5; }
     .sim-summary-box {
-      font-size: 12.5px;
-      line-height: 1.6;
+      font-size: 12px;
+      line-height: 1.55;
     }
     .sim-summary-box h3 {
-      font-size: 13px;
+      font-size: 12.5px;
       color: #a5b4fc;
-      margin: 10px 0 4px;
+      margin: 8px 0 4px;
       border-bottom: 1px solid rgba(99, 102, 241, 0.2);
       padding-bottom: 2px;
     }
@@ -256,26 +282,106 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 28px;
+      padding: 26px;
       transition: transform 0.2s, border-color 0.2s;
     }
     .feature-card:hover {
       transform: translateY(-3px);
       border-color: rgba(99, 102, 241, 0.4);
     }
-    .feature-icon {
-      width: 44px;
-      height: 44px;
-      background: rgba(99, 102, 241, 0.15);
+    .phase-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+    .phase-1 { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .phase-2 { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .phase-3 { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .phase-4 { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    .feature-card h3 { font-size: 17px; margin-bottom: 8px; font-weight: 700; color: #f1f5f9; }
+    .feature-card p { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Security Section */
+    .security-section {
+      background: #0f172a;
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      padding: 70px 24px;
+      margin-bottom: 80px;
+    }
+    .security-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 36px;
+    }
+    .security-item {
+      background: #1e293b;
+      padding: 22px;
       border-radius: 10px;
+      border: 1px solid #334155;
+    }
+    .security-item h4 {
+      font-size: 15px;
+      color: #f8fafc;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Installation Guide */
+    .install-section {
+      max-width: 900px;
+      margin: 0 auto 90px;
+      padding: 0 24px;
+    }
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 18px;
-      color: #818cf8;
+      flex-shrink: 0;
     }
-    .feature-card h3 { font-size: 17px; margin-bottom: 8px; font-weight: 700; }
-    .feature-card p { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+    .step-content h4 { font-size: 15px; margin-bottom: 4px; color: #f8fafc; }
+    .step-content p { font-size: 13px; color: var(--text-muted); }
+    .code-snippet {
+      background: #090d16;
+      border: 1px solid #233560;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #a5b4fc;
+      margin-top: 6px;
+      display: inline-block;
+    }
 
     footer.page-footer {
       border-top: 1px solid var(--card-border);
@@ -294,16 +400,18 @@
     <div class="brand">
       <img src="../assets/icons/icon32.png" alt="Siddarth Logo">
       <span>Siddarth</span>
-      <span style="font-size: 11px; background: rgba(99,102,241,0.2); color: #a5b4fc; padding: 2px 8px; border-radius: 12px;">Manifest V3</span>
+      <span style="font-size: 11px; background: rgba(99,102,241,0.2); color: #a5b4fc; padding: 2px 8px; border-radius: 12px;">v1.0.0 Release</span>
     </div>
     <div class="nav-links">
-      <a href="#simulator">Interactive Demo</a>
-      <a href="#features">Features</a>
+      <a href="#simulator">Live Demo</a>
+      <a href="#features">17 Slices</a>
+      <a href="#security">Safety Rails</a>
+      <a href="#install">Installation</a>
       <a href="https://github.com/SIDDUSIDDU-glitch/siddarth-ai-browser-agent" target="_blank" class="btn btn-outline">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
         </svg>
-        GitHub Repository
+        GitHub
       </a>
     </div>
   </header>
@@ -311,21 +419,29 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="pill">
-      <span>🚀 Phase 1 Delivered: Slices 1, 2, and 3 Verified</span>
+      <span>🛡️ 4 Phases &amp; 17 Vertical Slices Completed • Production Ready</span>
     </div>
     <h1>Context-Aware Chrome Side-Panel<br/>AI Browser Agent</h1>
     <p>
-      Siddarth eliminates tab-switching fatigue by living right inside Google Chrome. Extracts noise-free articles with Mozilla Readability, tracks live token metrics, and synthesizes 3-part structured summaries with Gemini Flash-Lite & Groq fallback.
+      Siddarth lives right inside Google Chrome. Reads webpages cleanly with Mozilla Readability, reasons visually with Gemini Flash multimodal vision, executes safe atomic actions with strict Human-in-the-Loop approval, and protects sensitive domains with deterministic safety rails.
     </p>
     <div class="hero-actions">
+      <a href="../dist/siddarth-browser-agent-v1.0.0.zip" class="btn btn-success" download>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Download Release ZIP (v1.0.0)
+      </a>
       <a href="#simulator" class="btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polygon points="5 3 19 12 5 21 5 3"></polygon>
         </svg>
-        Try Interactive Demo Below
+        Explore Interactive Simulator
       </a>
-      <a href="https://github.com/SIDDUSIDDU-glitch/siddarth-ai-browser-agent" target="_blank" class="btn btn-outline">
-        View Code & Instructions
+      <a href="#install" class="btn btn-outline">
+        Installation Steps
       </a>
     </div>
   </section>
@@ -345,7 +461,7 @@
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
-          <span>https://techinsights.org/rise-of-browser-agents</span>
+          <span id="sim-url-text">https://techinsights.org/rise-of-browser-agents</span>
         </div>
         <div style="font-size: 11px; color: #a5b4fc; font-weight: 600;">Chrome Side Panel</div>
       </div>
@@ -353,11 +469,11 @@
       <!-- Browser Body (Article on Left, Sidepanel on Right) -->
       <div class="simulator-body">
         <!-- Webpage Article View -->
-        <div class="sim-article">
+        <div class="sim-article" id="sim-page-view">
           <h2>The Rise of Context-Aware Browser AI Agents</h2>
           <div class="meta">By Dr. Sarah Chen • Tech Insights Daily • 6 min read</div>
           <p>
-            Over the past two years, conversational AI interfaces have fundamentally shifted how knowledge workers research, code, and brainstorm. Yet an enduring friction has plagued almost every existing assistant: the strict separation between the AI chat sandbox and the live web browser environment.
+            Conversational AI interfaces have fundamentally shifted how knowledge workers research, code, and brainstorm. Yet an enduring friction has plagued almost every existing assistant: the strict separation between the AI chat sandbox and the live web browser environment.
           </p>
           <p>
             Users find themselves trapped in a repetitive cycle of toggling between browser tabs, copying and pasting raw text, taking screenshots of errors, and manually describing interface structures to models that cannot see or understand the page. Context-aware browser agents represent the missing link—lightweight software running directly alongside the user in the browser window.
@@ -369,38 +485,86 @@
 
         <!-- Siddarth Side Panel Simulator -->
         <div class="sim-sidepanel">
-          <div class="sim-sidepanel-header">
-            <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px;">
-              <img src="../assets/icons/icon16.png" alt="Siddarth">
-              <span>Siddarth</span>
-            </div>
-            <div style="display: flex; gap: 4px;">
-              <button id="sim-lang-en" onclick="setSimLang('en')" style="background: #6366f1; color: white; border: none; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer;">EN</button>
-              <button id="sim-lang-hi" onclick="setSimLang('hi-en')" style="background: transparent; color: #94a3b8; border: 1px solid #334155; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer;">HI-EN</button>
-            </div>
+          <div class="sim-tabs-nav">
+            <button class="sim-tab-btn active" id="tab-nav-chat" onclick="switchSimTab('chat')">Chat &amp; Read</button>
+            <button class="sim-tab-btn" id="tab-nav-agent" onclick="switchSimTab('agent')">Agent Loop</button>
+            <button class="sim-tab-btn" id="tab-nav-profile" onclick="switchSimTab('profile')">Profile &amp; Skills</button>
           </div>
 
           <div class="sim-sidepanel-content">
-            <div class="sim-card">
-              <div style="font-size: 12px; color: #a5b4fc; font-weight: 600; margin-bottom: 6px;">⚡ Quick Action</div>
-              <button id="sim-summarize-btn" class="sim-btn" onclick="generateSimSummary()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                </svg>
-                Summarize Active Page
-              </button>
+            <!-- CHAT VIEW -->
+            <div id="sim-view-chat">
+              <div class="sim-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <span style="font-size: 12px; color: #a5b4fc; font-weight: 600;">⚡ Article Reader</span>
+                  <div style="display: flex; gap: 4px;">
+                    <button id="sim-lang-en" onclick="setSimLang('en')" style="background: #6366f1; color: white; border: none; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer;">EN</button>
+                    <button id="sim-lang-hi" onclick="setSimLang('hi-en')" style="background: transparent; color: #94a3b8; border: 1px solid #334155; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer;">HI-EN</button>
+                  </div>
+                </div>
+                <button id="sim-summarize-btn" class="sim-btn" onclick="generateSimSummary()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                  </svg>
+                  Summarize Active Page
+                </button>
+              </div>
+
+              <!-- Summary Output Card -->
+              <div id="sim-output-card" class="sim-card" style="display: none;">
+                <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px;">
+                  <span style="font-size: 10px; background: rgba(99,102,241,0.2); color: #a5b4fc; padding: 2px 6px; border-radius: 4px;">techinsights.org</span>
+                  <span style="font-size: 10px; background: #334155; color: #cbd5e1; padding: 2px 6px; border-radius: 4px;">~480 words</span>
+                  <span id="sim-lang-pill" style="font-size: 10px; background: rgba(16,185,129,0.2); color: #6ee7b7; padding: 2px 6px; border-radius: 4px;">English</span>
+                </div>
+                <div id="sim-summary-content" class="sim-summary-box"></div>
+              </div>
             </div>
 
-            <!-- Summary Output Card -->
-            <div id="sim-output-card" class="sim-card" style="display: none;">
-              <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px;">
-                <span style="font-size: 10px; background: rgba(99,102,241,0.2); color: #a5b4fc; padding: 2px 6px; border-radius: 4px;">techinsights.org</span>
-                <span style="font-size: 10px; background: #334155; color: #cbd5e1; padding: 2px 6px; border-radius: 4px;">~480 words</span>
-                <span id="sim-lang-pill" style="font-size: 10px; background: rgba(16,185,129,0.2); color: #6ee7b7; padding: 2px 6px; border-radius: 4px;">English</span>
+            <!-- AGENT VIEW -->
+            <div id="sim-view-agent" style="display: none;">
+              <div class="sim-card">
+                <div style="font-size: 11.5px; font-weight: 700; color: #fbbf24; margin-bottom: 6px;">🤖 Human-in-the-Loop Action Loop</div>
+                <p style="font-size: 11.5px; color: #94a3b8; margin-bottom: 10px;">Scans DOM, assigns numbered badges #1..#N, and proposes atomic steps with Approve/Skip/Stop gates.</p>
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid #334155; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
+                  <div style="display: flex; justify-content: space-between; font-size: 11px; color: #a5b4fc; margin-bottom: 4px;">
+                    <span>Step 1 of 5</span>
+                    <span style="background: #3b82f6; color: white; padding: 1px 5px; border-radius: 3px;">TYPE</span>
+                  </div>
+                  <div style="font-size: 12px; font-weight: 600; color: #fff;">Target: #1 Full Name Input</div>
+                  <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Value: "Siddarth Sharma"</div>
+                  <div style="font-size: 10.5px; color: #64748b; font-style: italic; margin-top: 4px;">Reason: Filling applicant name from local profile memory.</div>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                  <button class="btn btn-success" style="flex: 1; padding: 6px 10px; font-size: 11px;">Approve Step</button>
+                  <button class="btn btn-outline" style="padding: 6px 10px; font-size: 11px;">Skip</button>
+                  <button class="btn btn-outline" style="padding: 6px 10px; font-size: 11px; color: #ef4444;">Stop</button>
+                </div>
               </div>
-              <div id="sim-summary-content" class="sim-summary-box">
-                <!-- Injected via JavaScript -->
+            </div>
+
+            <!-- PROFILE & SKILLS VIEW -->
+            <div id="sim-view-profile" style="display: none;">
+              <div class="sim-card">
+                <div style="font-size: 11.5px; font-weight: 700; color: #34d399; margin-bottom: 4px;">📁 Local Profile &amp; Reusable Skills</div>
+                <p style="font-size: 11px; color: #94a3b8; margin-bottom: 10px;">Zero-cloud local memory (`chrome.storage.local`) with 1-click prompt recipes.</p>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <div style="background: rgba(255,255,255,0.03); border: 1px solid #334155; padding: 8px; border-radius: 6px; font-size: 11px;">
+                    <div style="display: flex; justify-content: space-between;">
+                      <span style="font-weight: 600; color: #fff;">Exam notes</span>
+                      <span style="color: #818cf8; font-size: 9px; font-weight: 700;">CHAT</span>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 10px;">High-yield definitions, formulas &amp; questions.</div>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.03); border: 1px solid #334155; padding: 8px; border-radius: 6px; font-size: 11px;">
+                    <div style="display: flex; justify-content: space-between;">
+                      <span style="font-weight: 600; color: #fff;">Fill form from profile</span>
+                      <span style="color: #f59e0b; font-size: 9px; font-weight: 700;">AGENT</span>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 10px;">Auto-fill active form using stored credentials.</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -409,56 +573,185 @@
     </div>
   </section>
 
-  <!-- Architectural Features Grid -->
+  <!-- Complete 4-Phase Capabilities Grid -->
   <section id="features" class="features">
     <div class="section-title">
-      <h2>Architectural Foundations & Features</h2>
-      <p>Engineered for deterministic safety, high speed, and local privacy.</p>
+      <h2>Complete Architectural Capabilities</h2>
+      <p>17 Vertical Slices delivered across 4 cohesive engineering phases.</p>
     </div>
 
     <div class="grid">
+      <!-- Phase 1 -->
       <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-          </svg>
-        </div>
-        <h3>Mozilla Readability Engine</h3>
-        <p>Bundled standalone DOM parsing strips ads, navigation bars, and cookie banners (`#onetrust`), isolating clean article text and clamping text to 25,000 characters.</p>
+        <span class="phase-badge phase-1">Phase 1: The Eyes</span>
+        <h3>Mozilla Readability &amp; Summaries</h3>
+        <p>Standalone in-tab DOM parsing strips noisy popups and cookie notices. Generates structured 3-part summaries (TL;DR, 5 Key Takeaways, Next Steps) with English &amp; Roman Hinglish bilingual switching.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polygon points="10 8 16 12 10 16 10 8"></polygon>
-          </svg>
-        </div>
-        <h3>Multi-Model Free-Tier Resilience</h3>
-        <p>Primary inference via Google Gemini Flash-Lite (`gemini-flash-lite-latest` / `gemini-3.5-flash-lite`) with automated exponential backoff and text fallback to Groq (`openai/gpt-oss-120b`).</p>
+        <span class="phase-badge phase-1">Phase 1: The Eyes</span>
+        <h3>YouTube Timestamps &amp; Seeking</h3>
+        <p>Detects public YouTube videos, extracts timed subtitles/chapters, and creates clickable timestamp badges (`[01:45]`). Clicking any badge seeks the YouTube video player immediately.</p>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="feature-card">
+        <span class="phase-badge phase-2">Phase 2: The Brain</span>
+        <h3>Grounded Chat &amp; Multimodal Vision</h3>
+        <p>Conversational Q&amp;A strictly grounded in parsed page content with anti-hallucination defenses. Screenshot-and-Ask captures active viewports and reasons over charts using Gemini Flash.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
+        <span class="phase-badge phase-2">Phase 2: The Brain</span>
+        <h3>Free-Tier Resilience &amp; Groq Fallback</h3>
+        <p>Absorbs burst rate limits (HTTP 429) via 3-stage exponential backoff with jitter. Automatically fails over to Groq Cloud (`llama-3.3-70b-versatile` / `openai/gpt-oss-120b`) with zero UI crash.</p>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="feature-card">
+        <span class="phase-badge phase-3">Phase 3: The Hands</span>
+        <h3>DOM Badging &amp; "Find It for Me"</h3>
+        <p>Scans visible interactive elements and projects non-intrusive floating badges `#1` to `#N` in natural reading order. Natural language target search grounds queries to specific DOM IDs.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="phase-badge phase-3">Phase 3: The Hands</span>
+        <h3>Human-in-the-Loop Action Loop</h3>
+        <p>Strict step-by-step browser automation. Proposes 1 atomic action at a time with Three-Button Gate (`Approve`, `Skip`, `Stop`), Dry-Run simulation mode, and persistent audit logging.</p>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="feature-card">
+        <span class="phase-badge phase-4">Phase 4: Memory &amp; Safety</span>
+        <h3>Local Profile &amp; One-Click Skills</h3>
+        <p>Stores personal identity, college, skills, links, and tone preferences in `chrome.storage.local`. Reusable prompt recipes with full JSON export and import capabilities.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="phase-badge phase-4">Phase 4: Memory &amp; Safety</span>
+        <h3>Deterministic Safety Rails</h3>
+        <p>Hardcode-enforced blocking of banking, UPI, and payment URLs. Strictly intercepts and rejects interactions with password, PIN, OTP, and CVV fields with secondary confirmation on consequential clicks.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="phase-badge phase-4">Phase 4: Packaging</span>
+        <h3>Release ZIP &amp; Verified DoD</h3>
+        <p>Automated production packager creating direct `Load unpacked` ZIP archives with zero developer secrets. Verified by 150+ unit and integration tests across all 17 slices.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Security & Privacy Section -->
+  <section id="security" class="security-section">
+    <div class="security-inner">
+      <div class="section-title">
+        <h2>Zero-Compromise Security Architecture</h2>
+        <p>Engineered with deterministic safety over probabilistic assumptions.</p>
+      </div>
+
+      <div class="security-grid">
+        <div class="security-item">
+          <h4>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Banking &amp; UPI Domain Guard
+          </h4>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.55;">
+            Deterministic regex automatically halts execution on banking, payment, and UPI portals (HDFC, SBI, PayPal, Stripe, Razorpay) with immediate safety warnings.
+          </p>
         </div>
-        <h3>Human-in-the-Loop & Safety Rails</h3>
-        <p>Deterministic regex guards block automated actions on banking and UPI payment gateways, while password, OTP, and CVV inputs are hardcoded against manipulation.</p>
+
+        <div class="security-item">
+          <h4>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Sensitive Field Protection
+          </h4>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.55;">
+            Multi-attribute heuristics block automated actions against passwords, credit cards, CVVs, and OTPs, even if inputs masquerade as standard text fields.
+          </p>
+        </div>
+
+        <div class="security-item">
+          <h4>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 6v6l4 2"></path>
+            </svg>
+            Local Storage &amp; Zero Telemetry
+          </h4>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.55;">
+            User profiles and API keys reside exclusively in `chrome.storage.local`. All API calls route directly from your browser to Google / Groq over encrypted HTTPS.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step-by-Step Installation Guide -->
+  <section id="install" class="install-section">
+    <div class="section-title">
+      <h2>Install in Google Chrome</h2>
+      <p>Takes less than 60 seconds with Developer Mode.</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Download Release ZIP</h4>
+        <p>Download the latest release package archive and extract it to a local folder on your computer.</p>
+        <a href="../dist/siddarth-browser-agent-v1.0.0.zip" class="btn btn-success" style="margin-top: 8px;" download>
+          Download siddarth-browser-agent-v1.0.0.zip
+        </a>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Open Chrome Extensions Manager</h4>
+        <p>Open a new tab in Google Chrome and enter the extensions URL into your address bar:</p>
+        <span class="code-snippet">chrome://extensions/</span>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Enable Developer Mode &amp; Load Unpacked</h4>
+        <p>Toggle <strong>"Developer mode"</strong> in the top-right corner. Click <strong>"Load unpacked"</strong> and select the extracted extension folder.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Configure API Key &amp; Open Side Panel</h4>
+        <p>Pin the Siddarth icon in your toolbar, open the Side Panel, navigate to <strong>Settings</strong>, enter your free Gemini API key, and click <strong>"Test Gemini Connection"</strong>!</p>
       </div>
     </div>
   </section>
 
   <!-- Page Footer -->
   <footer class="page-footer">
-    <p>Siddarth: Context-Aware Chrome Side-Panel AI Browser Agent • Built for Masai School Capstone • Open Source under MIT License</p>
+    <p>Siddarth: Context-Aware Chrome Side-Panel AI Browser Agent • Released under the MIT License • Built for the Masai Live Cohort</p>
   </footer>
 
   <script>
     let simLang = 'en';
+
+    function switchSimTab(tab) {
+      document.getElementById('tab-nav-chat').classList.toggle('active', tab === 'chat');
+      document.getElementById('tab-nav-agent').classList.toggle('active', tab === 'agent');
+      document.getElementById('tab-nav-profile').classList.toggle('active', tab === 'profile');
+
+      document.getElementById('sim-view-chat').style.display = tab === 'chat' ? 'block' : 'none';
+      document.getElementById('sim-view-agent').style.display = tab === 'agent' ? 'block' : 'none';
+      document.getElementById('sim-view-profile').style.display = tab === 'profile' ? 'block' : 'none';
+    }
 
     function setSimLang(lang) {
       simLang = lang;
@@ -500,16 +793,16 @@
             <p><strong>Context-aware browser agents user ke sath live browser me kaam karte hain aur copy-paste karne ka jhanjhat khatam karte hain.</strong></p>
             <h3>2. Five Key Takeaways</h3>
             <ul>
-              <li><strong>In-Browser Presence:</strong> External chat apps ke mukable yeh extension active DOM ko read karta hai.</li>
-              <li><strong>Readability Extraction:</strong> Ads, popups aur cookie banners ko automatically remove karta hai.</li>
-              <li><strong>Human-in-the-Loop:</strong> Koi bhi action bina user ke 'Approve' click kiye execute nahi hota.</li>
-              <li><strong>Zero Privacy Risk:</strong> API keys aur user data local storage me save hoti hain.</li>
-              <li><strong>Multi-Model Fallback:</strong> Gemini ke rate-limit pe Groq Cloud backup offer karta hai.</li>
+              <li><strong>In-Browser Presence:</strong> External chat apps ke mukable yeh extension active DOM ko direct read karta hai.</li>
+              <li><strong>Readability Extraction:</strong> Ads, popups aur cookie banners ko automatically strip karta hai.</li>
+              <li><strong>Human-in-the-Loop:</strong> Koi bhi browser action bina explicit 'Approve' click ke execute nahi hota.</li>
+              <li><strong>Zero Privacy Risk:</strong> Sensitive API keys aur user details local storage me secure rehte hain.</li>
+              <li><strong>Multi-Model Fallback:</strong> Gemini rate-limit aane par Groq Cloud automatically takeover karta hai.</li>
             </ul>
             <h3>3. What to Do Next</h3>
             <ul>
-              <li><strong>Wikipedia & Articles Test karein:</strong> Real pages pe summarize button click karke test karein.</li>
-              <li><strong>Custom Settings:</strong> Apne preferred Gemini ya Groq models choose karein.</li>
+              <li><strong>Live Webpages Test karein:</strong> Wikipedia ya news articles open karke summarizer run karein.</li>
+              <li><strong>Agent Loop Azmayein:</strong> Form filling aur visual badging explore karein.</li>
             </ul>
           `;
         } else {
@@ -528,13 +821,12 @@
             <h3>3. What to Do Next</h3>
             <ul>
               <li><strong>Test on Live Articles:</strong> Try summarizing technical articles on Wikipedia or Medium.</li>
-              <li><strong>Explore Settings:</strong> Configure rate-limit fallback and token usage limits.</li>
+              <li><strong>Explore Agent Loop:</strong> Test element badging and auto-form filling on practice forms.</li>
             </ul>
           `;
         }
-      }, 700);
+      }, 600);
     }
   </script>
 </body>
 </html>
-

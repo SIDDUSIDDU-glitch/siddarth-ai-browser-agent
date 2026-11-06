@@ -22,6 +22,8 @@ export class SettingsTab {
     this.toggleGroqBtn = document.getElementById('toggle-groq-visibility');
     this.modelSelect = document.getElementById('setting-model-select');
     this.fallbackToggle = document.getElementById('setting-fallback-toggle');
+    this.groqModelSelect = document.getElementById('setting-groq-model-select');
+    this.fallbackStatusBadge = document.getElementById('fallback-status-badge');
     this.maxStepsInput = document.getElementById('setting-max-steps');
     this.dryRunToggle = document.getElementById('setting-dry-run-toggle');
     
@@ -63,6 +65,11 @@ export class SettingsTab {
     // Test Groq Connection
     this.testGroqBtn?.addEventListener('click', () => this.handleTestGroq());
 
+    // Dynamic Fallback status badge updates
+    this.fallbackToggle?.addEventListener('change', () => this.updateFallbackStatusBadge());
+    this.groqKeyInput?.addEventListener('input', () => this.updateFallbackStatusBadge());
+    this.groqModelSelect?.addEventListener('change', () => this.updateFallbackStatusBadge());
+
     // Reset Token Statistics
     this.btnResetTokenStats?.addEventListener('click', () => this.handleResetTokenStats());
   }
@@ -73,6 +80,7 @@ export class SettingsTab {
     if (this.geminiKeyInput) this.geminiKeyInput.value = settings.geminiApiKey || '';
     if (this.groqKeyInput) this.groqKeyInput.value = settings.groqApiKey || '';
     if (this.modelSelect) this.modelSelect.value = settings.preferredModel || 'gemini-flash-lite-latest';
+    if (this.groqModelSelect) this.groqModelSelect.value = settings.groqModel || 'llama-3.3-70b-versatile';
     if (this.fallbackToggle) this.fallbackToggle.checked = !!settings.enableFallback;
     if (this.maxStepsInput) this.maxStepsInput.value = settings.maxAgentSteps || 10;
     if (this.dryRunToggle) this.dryRunToggle.checked = !!settings.dryRunMode;
@@ -83,6 +91,9 @@ export class SettingsTab {
     } else {
       this.onStatusChange({ connected: false, label: 'Key Required' });
     }
+
+    // Update fallback engine status badge
+    this.updateFallbackStatusBadge();
 
     // Render token statistics
     await this.renderTokenUsage();
@@ -125,6 +136,7 @@ export class SettingsTab {
     const geminiApiKey = this.geminiKeyInput.value.trim();
     const groqApiKey = this.groqKeyInput.value.trim();
     const preferredModel = this.modelSelect.value;
+    const groqModel = this.groqModelSelect?.value || 'llama-3.3-70b-versatile';
     const enableFallback = this.fallbackToggle.checked;
     const maxAgentSteps = parseInt(this.maxStepsInput.value, 10) || 10;
     const dryRunMode = this.dryRunToggle.checked;
@@ -133,11 +145,13 @@ export class SettingsTab {
       geminiApiKey,
       groqApiKey,
       preferredModel,
+      groqModel,
       enableFallback,
       maxAgentSteps,
       dryRunMode
     });
 
+    this.updateFallbackStatusBadge();
     this.showToast('Settings saved successfully!');
 
     if (geminiApiKey) {
@@ -212,7 +226,9 @@ export class SettingsTab {
 
       if (result.success) {
         // Auto-persist verified key to storage
-        await saveSettings({ groqApiKey: apiKey });
+        const groqModel = this.groqModelSelect?.value || 'llama-3.3-70b-versatile';
+        await saveSettings({ groqApiKey: apiKey, groqModel });
+        this.updateFallbackStatusBadge();
         this.showGroqTestResult(
           `Connected successfully! Model ${result.model} replied: "${result.reply}" in ${result.latencyMs}ms (${result.tokens.totalTokens} tokens). Key saved!`,
           'success'
@@ -225,6 +241,27 @@ export class SettingsTab {
       this.showGroqTestResult(`Verification failed: ${err.message}`, 'danger');
     } finally {
       this.setGroqTestingState(false);
+    }
+  }
+
+  /**
+   * Updates visual badge indicating fallback engine availability
+   */
+  updateFallbackStatusBadge() {
+    if (!this.fallbackStatusBadge) return;
+    const isEnabled = this.fallbackToggle ? this.fallbackToggle.checked : true;
+    const hasKey = !!this.groqKeyInput?.value?.trim();
+    const model = this.groqModelSelect?.value || 'llama-3.3-70b-versatile';
+
+    if (isEnabled && hasKey) {
+      this.fallbackStatusBadge.className = 'badge badge-accent';
+      this.fallbackStatusBadge.textContent = `⚡ Fallback Active (${model})`;
+    } else if (isEnabled && !hasKey) {
+      this.fallbackStatusBadge.className = 'badge badge-warning';
+      this.fallbackStatusBadge.textContent = 'Fallback Enabled (Groq Key Required)';
+    } else {
+      this.fallbackStatusBadge.className = 'badge badge-neutral';
+      this.fallbackStatusBadge.textContent = 'Fallback Disabled';
     }
   }
 

@@ -1,0 +1,25 @@
+{
+  "name": "siddarth-browser-agent",
+  "version": "1.0.0",
+  "description": "Context-aware AI browser companion built on Chrome Extension Manifest V3 with Readability extraction, multimodal vision, human-in-the-loop action loop, and deterministic safety rails.",
+  "type": "module",
+  "main": "background/service-worker.js",
+  "scripts": {
+    "build": "node scripts/build-release.js",
+    "package": "node scripts/build-release.js",
+    "test": "node tests/test-slice-10.js && node tests/test-slice-11.js && node tests/test-slice-12.js && node tests/test-slice-13.js && node tests/test-slice-14.js && node tests/test-slice-15.js && node tests/test-slice-16.js && node tests/test-slice-17.js",
+    "test:phase4": "node tests/test-slice-14.js && node tests/test-slice-15.js && node tests/test-slice-16.js && node tests/test-slice-17.js"
+  },
+  "keywords": [
+    "chrome-extension",
+    "ai-agent",
+    "manifest-v3",
+    "gemini",
+    "groq",
+    "readability",
+    "browser-automation",
+    "human-in-the-loop"
+  ],
+  "author": "Siddarth AI Team",
+  "license": "MIT"
+}

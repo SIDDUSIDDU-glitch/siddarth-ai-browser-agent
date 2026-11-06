@@ -16,4 +16,5 @@ Thumbs.db
 # Chrome Extension distribution build artifacts
 dist/
 *.zip
+.chrome-dev-profile/
 

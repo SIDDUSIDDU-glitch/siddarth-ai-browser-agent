@@ -114,6 +114,13 @@
             </svg>
             Summarize YouTube Video & Chapters
           </button>
+          <button id="quick-btn-screenshot" class="btn btn-secondary btn-block">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+            Capture Screenshot & Ask (Multimodal Vision)
+          </button>
         </div>
       </div>
 
@@ -164,10 +171,137 @@
           </button>
         </div>
       </div>
+
+      <!-- Screenshot & Multimodal Vision Preview Card (Slice 8) -->
+      <div id="screenshot-preview-card" class="card screenshot-preview-card" style="display: none;">
+        <div class="screenshot-header">
+          <div class="screenshot-header-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+            <span>Screenshot Captured</span>
+            <span class="badge badge-accent">Gemini Flash Vision</span>
+          </div>
+          <button type="button" id="btn-dismiss-screenshot" class="btn btn-secondary btn-sm" title="Dismiss screenshot">
+            ✕
+          </button>
+        </div>
+
+        <p class="screenshot-tip">Drag across the image to crop a focus region, or analyze the full view.</p>
+
+        <!-- Canvas Area -->
+        <div class="screenshot-canvas-container">
+          <canvas id="screenshot-canvas"></canvas>
+        </div>
+
+        <!-- Crop Toolbar -->
+        <div class="screenshot-crop-toolbar">
+          <span id="crop-status-badge" class="badge badge-neutral">Full View (100%)</span>
+          <div class="crop-actions">
+            <button type="button" id="btn-crop-full" class="btn btn-secondary btn-sm" title="Reset to full view">Full View</button>
+            <button type="button" id="btn-crop-reset" class="btn btn-secondary btn-sm" title="Clear crop selection">Reset Crop</button>
+          </div>
+        </div>
+
+        <!-- Vision Prompt & Suggestion Chips -->
+        <div class="screenshot-prompt-section">
+          <div class="screenshot-chips">
+            <button type="button" class="screenshot-chip" data-prompt="Which month had the highest sales?">Which month had highest sales?</button>
+            <button type="button" class="screenshot-chip" data-prompt="Explain this chart or diagram in detail.">Explain Chart / Diagram</button>
+            <button type="button" class="screenshot-chip" data-prompt="What error or issue is shown here?">Explain Error / Bug</button>
+            <button type="button" class="screenshot-chip" data-prompt="Extract all visible text and numerical data.">Extract Text & Data</button>
+          </div>
+
+          <div class="screenshot-input-row">
+            <input type="text" id="screenshot-prompt-input" class="screenshot-input" placeholder="Ask about this image... (e.g. Which month had the highest sales?)" />
+            <button type="button" id="btn-analyze-screenshot" class="btn btn-primary" title="Analyze with Gemini Vision">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>Analyze</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grounded Page Chat Section (Slice 6) -->
+      <div id="chat-conversation-card" class="card chat-card">
+        <div class="chat-header">
+          <div class="chat-header-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>Grounded Page Chat</span>
+          </div>
+          <div class="chat-header-controls">
+            <span id="chat-grounding-pill" class="badge badge-accent" title="Current grounding source">
+              <span class="status-dot-sm"></span>
+              <span id="chat-grounding-text">Page Context</span>
+            </span>
+            <button type="button" id="btn-clear-chat" class="btn btn-secondary btn-sm" title="Clear chat messages">
+              Clear Chat
+            </button>
+          </div>
+        </div>
+
+        <div class="chat-messages-container" id="chat-messages-list">
+          <!-- Empty State -->
+          <div id="chat-empty-state" class="chat-empty-state">
+            <div class="empty-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <p class="empty-title">Ask about this webpage</p>
+            <p class="empty-subtitle">Siddarth answers strictly from page content with zero hallucination.</p>
+            <div class="suggestion-chips">
+              <button type="button" class="suggestion-chip" data-prompt="What is the main point of this page?">Main Point</button>
+              <button type="button" class="suggestion-chip" data-prompt="List 3 critical takeaways in bullet points">3 Takeaways</button>
+              <button type="button" class="suggestion-chip" data-prompt="Are there any actionable recommendations?">Next Steps</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input Bar -->
+        <div class="chat-input-wrapper">
+          <div class="chat-input-bar">
+            <textarea id="chat-user-input" class="chat-input" placeholder="Ask anything about this page... (Enter to send)" rows="1"></textarea>
+            <div class="chat-input-actions">
+              <button type="button" id="btn-chat-camera" class="btn-chat-icon btn-camera" title="Capture Screenshot & Ask (Multimodal Vision)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+              </button>
+              <button type="button" id="btn-chat-stop" class="btn-chat-icon btn-stop-stream" style="display: none;" title="Stop streaming">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+                </svg>
+              </button>
+              <button type="button" id="btn-chat-send" class="btn-chat-icon btn-send" title="Send message">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="chat-input-footer">
+            <span class="grounding-note">Strictly grounded in active page • Anti-hallucination guardrails active</span>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- TAB: AGENT -->
     <section id="tab-agent" class="tab-panel">
+      <!-- Error Box -->
+      <div id="agent-error-box" class="alert-box alert-error" style="display: none; margin-bottom: 12px;"></div>
+
+      <!-- Agent Overview Card -->
       <div class="card">
         <div class="card-title">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2">
@@ -184,34 +318,513 @@
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">Interactive Element Scanner</div>
-        <p class="card-description">Detect buttons, inputs, links, and forms on the current webpage.</p>
-        <button id="btn-scan-elements" class="btn btn-secondary btn-block">
-          Scan & Show Numbered Badges
-        </button>
+      <!-- Slice 12: Human-in-the-Loop Action Loop Card -->
+      <div class="card" id="agent-loop-main-card">
+        <div class="card-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <div class="card-title" style="margin-bottom: 0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2">
+              <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+            </svg>
+            Human-in-the-Loop Action Loop
+          </div>
+          <span class="badge badge-accent">Slice 12</span>
+        </div>
+        <p class="card-description">Specify what to achieve on this page. Siddarth proposes one atomic step at a time and executes only upon your explicit approval.</p>
+
+        <!-- Task Input Row -->
+        <div class="agent-task-input-row" style="display: flex; gap: 6px; margin-top: 10px;">
+          <input type="text" id="agent-task-input" class="form-input" style="flex: 1; font-size: 12px; padding: 7px 10px;" placeholder="e.g. Fill out internship form with my info" />
+          <button type="button" id="btn-start-task" class="btn btn-primary" style="white-space: nowrap; padding: 7px 14px; font-size: 12px;">
+            <span class="icon">🚀</span> Start Task
+          </button>
+        </div>
+
+        <!-- Quick Task Chips -->
+        <div class="agent-task-chips" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;">
+          <button type="button" class="agent-task-chip" data-task="Fill out form using my profile memory">Fill from Profile</button>
+          <button type="button" class="agent-task-chip" data-task="Fill out internship application form">Internship Form</button>
+          <button type="button" class="agent-task-chip" data-task="Subscribe to newsletter with my email">Subscribe</button>
+          <button type="button" class="agent-task-chip" data-task="Search and apply filter">Search & Filter</button>
+        </div>
+
+        <!-- Dry-Run Simulation Toggle Row (Slice 13) -->
+        <div class="agent-mode-control-row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding: 7px 10px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: var(--radius-sm);">
+          <label class="agent-toggle-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;">
+            <input type="checkbox" id="toggle-dry-run" style="accent-color: #818cf8; width: 15px; height: 15px; cursor: pointer;" />
+            <span style="font-size: 11.5px; font-weight: 600; color: var(--text-primary);">Dry-Run Simulation Mode</span>
+          </label>
+          <span id="badge-dry-run-status" class="badge badge-neutral" style="font-size: 10px;">Execution Active</span>
+        </div>
+
+        <!-- Planning / Executing Spinner Status Card -->
+        <div id="agent-loop-status-card" class="loading-card" style="display: none; margin-top: 12px; border-radius: var(--radius-sm);">
+          <div class="spinner"></div>
+          <div style="flex: 1;">
+            <div id="agent-loop-status-title" style="font-weight: 600; font-size: 12.5px; color: var(--text-primary);">Planning Next Step...</div>
+            <div id="agent-loop-status-sub" style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Analyzing page elements with Gemini Flash-Lite</div>
+          </div>
+        </div>
+
+        <!-- Step Proposal Card (Awaiting Approval) -->
+        <div id="agent-step-proposal-card" class="agent-proposal-box" style="display: none; margin-top: 14px;">
+          <div class="agent-proposal-header">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span id="agent-step-counter" class="badge badge-accent">Step 1</span>
+              <span class="agent-proposal-title">Proposed Action</span>
+            </div>
+            <span id="agent-proposal-state-pill" class="badge badge-pending">
+              <span class="status-dot-sm"></span> Awaiting Approval
+            </span>
+          </div>
+
+          <!-- Dry-Run Simulation Notice Banner (Slice 13) -->
+          <div id="prop-dryrun-banner" class="alert-box alert-info" style="display: none; padding: 6px 10px; margin-bottom: 10px; font-size: 11px;">
+            <span>🛡️ <strong>Dry-Run Mode</strong>: Element will be highlighted on page, but no click or keystroke will be dispatched.</span>
+          </div>
+
+          <!-- Proposed Target & Action Type Row -->
+          <div class="agent-proposal-action-row">
+            <span id="prop-action-type" class="agent-action-type-pill pill-type">TYPE</span>
+            <span id="prop-target-badge" class="agent-id-pill" style="min-width: 24px; height: 20px; font-size: 11px;">#1</span>
+            <span id="prop-target-label" class="agent-proposal-label">Full Name Input</span>
+          </div>
+
+          <!-- Proposed Value Preview Row -->
+          <div id="prop-value-row" class="agent-proposal-value-row">
+            <span class="prop-label">Value to Enter:</span>
+            <div id="prop-value-text" class="prop-value-code">"John Doe"</div>
+          </div>
+
+          <!-- Reason / Explanation -->
+          <div class="agent-proposal-reason-row">
+            <span class="prop-label">Reasoning:</span>
+            <p id="prop-reason-text" class="prop-reason-body">Populating full name from profile memory.</p>
+          </div>
+
+          <!-- Consequential Alert Warning Box -->
+          <div id="prop-consequential-alert" class="agent-consequential-box" style="display: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" style="flex-shrink: 0;">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <div>
+              <strong style="color: #fca5a5;">Consequential Action Alert</strong>
+              <div style="font-size: 11px; color: #f87171; margin-top: 1px;">This action submits data, makes a payment, or triggers an irreversible change. Review carefully before approving.</div>
+            </div>
+          </div>
+
+          <!-- The Three-Button Gate -->
+          <div class="agent-three-button-gate">
+            <button type="button" id="btn-approve-step" class="btn btn-approve">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Approve & Execute</span>
+            </button>
+            <button type="button" id="btn-skip-step" class="btn btn-secondary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+              <span>Skip</span>
+            </button>
+            <button type="button" id="btn-stop-loop" class="btn btn-stop">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="6" y="6" width="12" height="12"></rect>
+              </svg>
+              <span>Stop</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Task Done / Finished Box -->
+        <div id="agent-task-done-box" class="alert-box alert-success" style="display: none; margin-top: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 16px;">🎉</span>
+            <div>
+              <strong>Task Completed!</strong>
+              <div id="agent-task-done-message" style="font-size: 11.5px; margin-top: 2px;">All actions have been executed successfully.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Session Step History Card -->
+        <div id="agent-history-card" class="agent-history-box" style="display: none; margin-top: 14px;">
+          <div class="agent-history-header">
+            <span class="card-subtitle">Session Progress (<span id="agent-history-count">0</span> steps)</span>
+            <button type="button" id="btn-clear-history" class="btn btn-secondary btn-sm" style="padding: 2px 7px; font-size: 10px;">Clear</button>
+          </div>
+          <div id="agent-step-history-list" class="agent-history-list"></div>
+        </div>
       </div>
+
+      <!-- Slice 13: Persistent Historical Action Audit Log Card -->
+      <div class="card" id="agent-audit-card">
+        <div class="card-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <div class="card-title" style="margin-bottom: 0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            Historical Action Audit Log
+          </div>
+          <span id="agent-audit-count-badge" class="badge badge-accent">0 Events</span>
+        </div>
+        <p class="card-description">Tamper-evident audit trail of approved, skipped, and dry-run browser actions preserved in local storage.</p>
+
+        <!-- Audit Toolbar -->
+        <div class="agent-audit-toolbar" style="display: flex; gap: 6px; margin-top: 8px; margin-bottom: 8px;">
+          <input type="text" id="agent-audit-search-input" class="form-input" style="flex: 1; font-size: 11px; padding: 5px 8px;" placeholder="Filter audit trail by action or target..." />
+          <button type="button" id="btn-export-audit-logs" class="btn btn-secondary btn-sm" title="Download audit logs as JSON file" style="font-size: 11px; padding: 4px 8px; white-space: nowrap;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Export
+          </button>
+          <button type="button" id="btn-clear-audit-logs" class="btn btn-secondary btn-sm" title="Clear all audit logs" style="font-size: 11px; padding: 4px 8px;">
+            Clear
+          </button>
+        </div>
+
+        <!-- Audit Log List Container -->
+        <div id="agent-audit-list" class="agent-audit-list-container"></div>
+        <div id="agent-audit-empty" class="agent-audit-empty-text" style="display: block;">No actions recorded yet. Approved and simulated actions will appear here.</div>
+      </div>
+
+      <!-- Scanner Controls Card -->
+      <div class="card">
+        <div class="card-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <div class="card-title" style="margin-bottom: 0;">Interactive Element Scanner</div>
+          <span class="badge badge-accent">Slice 10</span>
+        </div>
+        <p class="card-description">Scan and project numbered badges over buttons, inputs, links, and forms on the current webpage.</p>
+        
+        <div class="agent-scanner-buttons-row" style="display: flex; gap: 8px; margin-top: 10px;">
+          <button id="btn-scan-elements" class="btn btn-primary" style="flex: 1;">
+            <span class="icon">🔍</span>
+            Scan & Show Numbered Badges
+          </button>
+          <button id="btn-clear-badges" class="btn btn-secondary" style="display: none;" title="Remove badges from page">
+            Clear Badges
+          </button>
+        </div>
+      </div>
+
+      <!-- Slice 11: Structured Element Selection ("Find It for Me") Card -->
+      <div class="card" id="agent-find-element-card">
+        <div class="card-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <div class="card-title" style="margin-bottom: 0;">Find It for Me</div>
+          <span class="badge badge-accent">Slice 11</span>
+        </div>
+        <p class="card-description">Ask in natural language where a field, button, or link is, and Siddarth will visually highlight it.</p>
+
+        <div class="agent-find-input-row" style="display: flex; gap: 6px; margin-top: 10px;">
+          <input type="text" id="agent-find-input" class="form-input" style="flex: 1; font-size: 12px; padding: 7px 10px;" placeholder="e.g. Where do I upload CV?" />
+          <button type="button" id="btn-find-element" class="btn btn-primary" style="white-space: nowrap; padding: 7px 12px; font-size: 12px;">
+            <span class="icon">🎯</span> Find & Highlight
+          </button>
+        </div>
+
+        <!-- Quick suggestion chips -->
+        <div class="agent-find-chips" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;">
+          <button type="button" class="agent-find-chip" data-query="Where do I upload CV / Resume?">Upload CV</button>
+          <button type="button" class="agent-find-chip" data-query="Where do I enter my email address?">Enter Email</button>
+          <button type="button" class="agent-find-chip" data-query="Where is the submit button?">Submit Button</button>
+          <button type="button" class="agent-find-chip" data-query="Where do I select degree or major?">Degree Dropdown</button>
+        </div>
+
+        <!-- Find Result Box -->
+        <div id="agent-find-result-box" class="agent-find-result-card" style="display: none; margin-top: 12px;">
+          <div class="agent-find-result-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span id="find-result-badge" class="agent-id-pill" style="min-width: 24px; height: 20px; font-size: 11px;">#?</span>
+              <span id="find-result-label" class="agent-find-label" style="font-weight: 700; font-size: 13px; color: var(--text-primary);">Target Field</span>
+            </div>
+            <button type="button" id="btn-dismiss-find" class="btn btn-secondary btn-sm" style="padding: 2px 7px; font-size: 11px;">Dismiss</button>
+          </div>
+          <p id="find-result-reason" class="agent-find-reason" style="font-size: 12px; color: #94a3b8; margin: 4px 0 8px 0; line-height: 1.4;">Reasoning explanation...</p>
+          <div class="agent-find-actions" style="display: flex; gap: 6px;">
+            <button type="button" id="btn-rehighlight-target" class="btn btn-secondary btn-sm" style="font-size: 11px; padding: 4px 10px;">
+              <span class="icon">🎯</span> Re-focus on Webpage
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scanned Elements Summary & Filter Card -->
+      <div id="agent-scanner-summary-card" class="card" style="display: none;">
+        <div class="agent-summary-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+          <div>
+            <div class="card-title" style="margin-bottom: 2px;">Detected Elements</div>
+            <p class="card-description" style="margin: 0; font-size: 11px;">Interactive elements numbered sequentially on the active tab.</p>
+          </div>
+          <span id="agent-scanned-count-badge" class="badge badge-accent">0 Elements</span>
+        </div>
+
+        <!-- Breakdown counters -->
+        <div class="agent-breakdown-grid">
+          <div class="agent-stat-box">
+            <span class="stat-number" id="badge-count-inputs">0</span>
+            <span class="stat-label">Inputs</span>
+          </div>
+          <div class="agent-stat-box">
+            <span class="stat-number" id="badge-count-buttons">0</span>
+            <span class="stat-label">Buttons</span>
+          </div>
+          <div class="agent-stat-box">
+            <span class="stat-number" id="badge-count-links">0</span>
+            <span class="stat-label">Links</span>
+          </div>
+          <div class="agent-stat-box">
+            <span class="stat-number" id="badge-count-selects">0</span>
+            <span class="stat-label">Selects</span>
+          </div>
+          <div class="agent-stat-box stat-alert">
+            <span class="stat-number" id="badge-count-consequential">0</span>
+            <span class="stat-label">Alerts</span>
+          </div>
+        </div>
+
+        <!-- Search input -->
+        <div class="agent-search-row" style="margin-top: 10px; margin-bottom: 8px;">
+          <input type="text" id="agent-element-search-input" class="form-input" style="font-size: 12px; padding: 6px 10px;" placeholder="Filter by #ID, label, tag or name..." />
+        </div>
+
+        <!-- Category filter chips -->
+        <div class="agent-filter-chips">
+          <button type="button" class="agent-filter-chip active" data-filter="all">All</button>
+          <button type="button" class="agent-filter-chip" data-filter="inputs">Inputs</button>
+          <button type="button" class="agent-filter-chip" data-filter="buttons">Buttons</button>
+          <button type="button" class="agent-filter-chip" data-filter="links">Links</button>
+          <button type="button" class="agent-filter-chip" data-filter="selects">Selects</button>
+          <button type="button" class="agent-filter-chip" data-filter="consequential">Consequential</button>
+        </div>
+
+        <!-- Scanned Elements Scrollable List -->
+        <div id="agent-elements-list" class="agent-elements-container"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="agent-empty-elements-state" class="empty-state" style="padding: 24px 16px;">
+        <div class="empty-icon" style="font-size: 28px; margin-bottom: 8px;">🏷️</div>
+        <div class="empty-title" style="font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px;">No Elements Scanned Yet</div>
+        <div class="empty-desc" style="font-size: 12px; color: #64748b; line-height: 1.4;">Click <strong>Scan & Show Numbered Badges</strong> above to detect all interactive elements on your current page.</div>
+      </div>
+
+      <!-- Agent Toast Notification -->
+      <div id="agent-toast" class="agent-toast"></div>
     </section>
 
-    <!-- TAB: PROFILE -->
+    <!-- TAB: PROFILE (Slice 14: Local Profile Memory) -->
     <section id="tab-profile" class="tab-panel">
+      <!-- Overview Card with Local Storage Guarantee -->
       <div class="card">
-        <div class="card-title">Local Profile Memory</div>
-        <p class="card-description">
-          Your profile is stored <strong>only on this machine</strong> in <code>chrome.storage.local</code>. It is
-          reused for filling forms and drafting responses.
-        </p>
-        <div class="form-group">
-          <label class="form-label">Full Name</label>
-          <input type="text" id="profile-name" class="input-text" placeholder="e.g. Jane Doe">
+        <div class="card-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <div class="card-title" style="margin-bottom: 0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Local Profile Memory
+          </div>
+          <span class="badge badge-accent">Slice 14</span>
         </div>
+        <p class="card-description">
+          Personal data stored <strong>strictly on your device</strong> in <code>chrome.storage.local</code>. Never uploaded to remote databases. Injected into agent prompts for auto-form filling and personalized drafting.
+        </p>
+
+        <!-- Completeness Meter -->
+        <div class="profile-meter-box" style="margin-top: 10px; margin-bottom: 12px; padding: 10px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: var(--radius-sm);">
+          <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px;">
+            <span style="font-weight: 600; color: #cbd5e1;">Profile Memory Completeness</span>
+            <span id="profile-completeness-text" style="color: #a5b4fc; font-weight: 700;">0%</span>
+          </div>
+          <div class="profile-progress-bar" style="width: 100%; height: 6px; background: #334155; border-radius: 3px; overflow: hidden;">
+            <div id="profile-completeness-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #6366f1, #10b981); transition: width 0.3s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Quick One-Click Action -->
+        <div class="profile-action-banner" style="margin-bottom: 16px;">
+          <button type="button" id="btn-fill-form-profile" class="btn btn-primary btn-block" style="gap: 8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            Fill Active Webpage Form from Profile
+          </button>
+        </div>
+
+        <!-- Section 1: Candidate Identity -->
+        <div class="form-section-header" style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: #818cf8; margin: 12px 0 8px 0; letter-spacing: 0.5px;">
+          Personal Identity
+        </div>
+
         <div class="form-group">
-          <label class="form-label">College / Organization</label>
+          <label class="form-label" for="profile-name">Full Name</label>
+          <input type="text" id="profile-name" class="input-text" placeholder="e.g. Siddarth Sharma">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profile-email">Email Address</label>
+          <input type="email" id="profile-email" class="input-text" placeholder="e.g. siddarth@example.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profile-phone">Phone Number</label>
+          <input type="tel" id="profile-phone" class="input-text" placeholder="e.g. +91 98765 43210">
+        </div>
+
+        <!-- Section 2: Education & Technical Background -->
+        <div class="form-section-header" style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: #818cf8; margin: 16px 0 8px 0; letter-spacing: 0.5px;">
+          Education & Technical Background
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profile-college">College / University</label>
           <input type="text" id="profile-college" class="input-text" placeholder="e.g. IIT Bombay">
         </div>
+
         <div class="form-group">
-          <label class="form-label">Key Skills</label>
-          <input type="text" id="profile-skills" class="input-text" placeholder="e.g. Python, React, Machine Learning">
+          <label class="form-label" for="profile-degree">Degree Program / Major</label>
+          <input type="text" id="profile-degree" class="input-text" placeholder="e.g. B.Tech Computer Science & Engineering">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profile-skills">Key Technical Skills</label>
+          <input type="text" id="profile-skills" class="input-text" placeholder="e.g. JavaScript, React, Python, PyTorch, Node.js">
+        </div>
+
+        <!-- Section 3: Links, Bio & AI Tone -->
+        <div class="form-section-header" style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: #818cf8; margin: 16px 0 8px 0; letter-spacing: 0.5px;">
+          Online Presence & AI Tone Preference
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profile-links">Portfolio / GitHub / LinkedIn Links</label>
+          <input type="text" id="profile-links" class="input-text" placeholder="e.g. https://github.com/siddarth, https://linkedin.com/in/siddarth">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profile-bio">Bio / Personal Statement</label>
+          <textarea id="profile-bio" class="input-text" style="min-height: 75px; resize: vertical;" placeholder="Brief summary of experience, projects, and goals for cover letters or application statements..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profile-tone">Preferred AI Writing Tone</label>
+          <select id="profile-tone" class="input-text">
+            <option value="Professional and concise">Professional and concise</option>
+            <option value="Polite and conversational">Polite and conversational</option>
+            <option value="Technical and structured">Technical and structured</option>
+            <option value="Confident and ambitious">Confident and ambitious</option>
+          </select>
+        </div>
+
+        <!-- Buttons Row -->
+        <div style="display: flex; gap: 8px; margin-top: 18px;">
+          <button type="button" id="btn-save-profile" class="btn btn-primary" style="flex: 2;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            Save Profile Memory
+          </button>
+          <button type="button" id="btn-clear-profile" class="btn btn-secondary" style="flex: 1;">
+            Clear
+          </button>
+        </div>
+
+        <!-- Feedback Alert Box -->
+        <div id="profile-status-box" class="alert-box" style="display: none; margin-top: 12px;"></div>
+      </div>
+
+      <!-- Card: Reusable One-Click Skills (Slice 15) -->
+      <div class="card" style="margin-top: 14px;">
+        <div class="card-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <div class="card-title" style="margin-bottom: 0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            Reusable One-Click Skills
+          </div>
+          <span class="badge badge-accent">Slice 15</span>
+        </div>
+        <p class="card-description">
+          Save, run, export, and import reusable prompt recipes. Run any skill with 1-click on the active webpage.
+        </p>
+
+        <!-- Skills Actions Toolbar -->
+        <div class="skills-toolbar" style="display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 14px 0;">
+          <button type="button" id="btn-create-skill" class="btn btn-primary btn-sm" style="gap: 5px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            New Skill
+          </button>
+          <button type="button" id="btn-export-skills" class="btn btn-secondary btn-sm" style="gap: 5px;" title="Export skills to JSON file">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Export JSON
+          </button>
+          <button type="button" id="btn-import-skills" class="btn btn-secondary btn-sm" style="gap: 5px;" title="Import skills from JSON file">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            Import JSON
+          </button>
+          <input type="file" id="file-import-skills" accept=".json" style="display: none;" />
+          <button type="button" id="btn-reset-skills" class="btn btn-secondary btn-sm" title="Reset to default skills">
+            Reset
+          </button>
+        </div>
+
+        <!-- Create / Edit Skill Form (Hidden by default) -->
+        <div id="skill-editor-card" class="skill-editor-box" style="display: none; padding: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(129, 140, 248, 0.3); border-radius: var(--radius-sm); margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span id="skill-editor-title" style="font-size: 12px; font-weight: 700; color: #a5b4fc;">Create New Skill Recipe</span>
+            <button type="button" id="btn-cancel-skill" class="btn btn-secondary btn-sm" style="padding: 2px 6px; font-size: 11px;">✕ Cancel</button>
+          </div>
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label class="form-label" for="skill-input-name" style="font-size: 11px;">Skill Name</label>
+            <input type="text" id="skill-input-name" class="input-text" placeholder="e.g. 3-Bullet Summary" />
+          </div>
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label class="form-label" for="skill-input-desc" style="font-size: 11px;">Description</label>
+            <input type="text" id="skill-input-desc" class="input-text" placeholder="e.g. Condenses page into 3 crisp takeaways" />
+          </div>
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label class="form-label" for="skill-input-target" style="font-size: 11px;">Execution Target</label>
+            <select id="skill-input-target" class="input-text">
+              <option value="chat">Grounded Chat (Page Q&A / Drafting)</option>
+              <option value="agent">Agent Action Loop (Form filling / Clicks)</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label class="form-label" for="skill-input-prompt" style="font-size: 11px;">Prompt Recipe Template</label>
+            <textarea id="skill-input-prompt" class="input-text" style="min-height: 70px; resize: vertical;" placeholder="Analyze this page content and..."></textarea>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 8px;">
+            <button type="button" id="btn-save-skill" class="btn btn-primary btn-sm">Save Skill Recipe</button>
+          </div>
+        </div>
+
+        <!-- Skills Feedback Alert Box -->
+        <div id="skills-status-box" class="alert-box" style="display: none; margin-bottom: 12px;"></div>
+
+        <!-- Skills List Container -->
+        <div id="skills-list-container" class="skills-list" style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Dynamically populated skills cards -->
         </div>
       </div>
     </section>
@@ -290,6 +903,11 @@
       <div class="card">
         <div class="card-title">Model & Fallback Preferences</div>
 
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <span style="font-size: 12px; font-weight: 600; color: #fff;">Fallback Engine Status</span>
+          <span id="fallback-status-badge" class="badge badge-accent">⚡ Fallback Active (Groq Llama 3.3)</span>
+        </div>
+
         <div class="form-group">
           <label class="form-label" for="setting-model-select">Primary Everyday Model</label>
           <select id="setting-model-select" class="select-box">
@@ -322,11 +940,25 @@
           </p>
         </div>
 
+        <div class="form-group">
+          <label class="form-label" for="setting-groq-model-select">Groq Fallback Model</label>
+          <select id="setting-groq-model-select" class="select-box">
+            <option value="llama-3.3-70b-versatile" selected>Llama 3.3 70B Versatile (Recommended Fallback)</option>
+            <option value="llama-3.1-8b-instant">Llama 3.1 8B Instant (Ultra-Fast)</option>
+            <option value="openai/gpt-oss-120b">GPT OSS 120B (High Capacity)</option>
+            <option value="qwen/qwen3.8-27b">Qwen 27B</option>
+          </select>
+        </div>
+
         <button id="btn-test-groq" class="btn btn-secondary btn-block">
           Test Groq Connection
         </button>
 
         <div id="test-groq-result-box" class="alert-box" style="display: none; margin-top: 10px;"></div>
+
+        <div class="alert-box alert-info" style="margin-top: 12px; font-size: 11.5px; line-height: 1.45;">
+          <span><strong>Free-Tier Resilience (Slice 9)</strong>: 3-stage exponential backoff with jitter (1s, 2s, 4s) absorbs burst limits (HTTP 429 & 503). If Gemini quota is exhausted, text tasks automatically route to Groq Cloud with zero UI crash.</span>
+        </div>
       </div>
 
       <div class="card">
@@ -355,6 +987,53 @@
     </section>
 
   </main>
+
+  <!-- Consequential Action Confirmation Modal (Slice 16: Deterministic Safety Rails) -->
+  <div id="consequential-confirm-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon-alert">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <div class="modal-title-box">
+          <h3 class="modal-title">Consequential Action Warning</h3>
+          <span class="badge badge-warning">High Impact</span>
+        </div>
+      </div>
+      <p class="modal-description">
+        This action involves a high-impact operation (<strong id="conseq-modal-action-name">Submit / Payment / Deletion</strong>) that may permanently submit data or alter page state.
+      </p>
+      <div class="modal-detail-box">
+        <div class="modal-detail-row">
+          <span class="modal-detail-label">Target Element:</span>
+          <span id="conseq-modal-target-label" class="modal-detail-value">#6 "Submit Application"</span>
+        </div>
+        <div class="modal-detail-row" id="conseq-modal-value-row" style="display: none;">
+          <span class="modal-detail-label">Value:</span>
+          <span id="conseq-modal-value" class="modal-detail-value"></span>
+        </div>
+        <div class="modal-detail-row">
+          <span class="modal-detail-label">Reason:</span>
+          <span id="conseq-modal-reason" class="modal-detail-value">Submitting the application.</span>
+        </div>
+      </div>
+      <p class="modal-confirm-prompt">
+        Please confirm that you want to execute this consequential action on the active webpage.
+      </p>
+      <div class="modal-actions">
+        <button type="button" id="btn-cancel-consequential" class="btn btn-secondary" style="flex: 1;">
+          Cancel
+        </button>
+        <button type="button" id="btn-confirm-consequential" class="btn btn-danger" style="flex: 1.5;">
+          Yes, Execute Action
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Notification -->
   <div id="app-toast" class="toast">Settings saved successfully!</div>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Innovations - AI Internship Application Form</title>
+  <link rel="stylesheet" href="../../content/content.css">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --danger: #ef4444;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 80px;
+    }
+
+    header.app-header {
+      background: #111827;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      color: #ffffff;
+    }
+
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+    }
+
+    nav.nav-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    nav.nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.15s ease;
+    }
+
+    nav.nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 36px auto;
+      padding: 0 20px;
+    }
+
+    .form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-heading {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .card-subheading {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .form-section {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #818cf8;
+      margin-bottom: 14px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .form-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .form-row .form-group {
+      margin-bottom: 0;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--text);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .checkbox-group,
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .check-label,
+    .radio-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: normal;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    input[type="file"] {
+      background: #0f172a;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .btn-secondary {
+      background: #334155;
+      color: #ffffff;
+      border-color: #475569;
+    }
+
+    .btn-secondary:hover {
+      background: #475569;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-submit {
+      background: #4338ca;
+      color: #ffffff;
+    }
+
+    .btn-submit:hover {
+      background: #3730a3;
+    }
+
+    /* Helper notification */
+    .banner-tip {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      font-size: 12px;
+      color: #c7d2fe;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation header with links -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon">A</div>
+      <span>Apex Innovations</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#home" id="nav-home">Home</a>
+      <a href="#openings" id="nav-openings">Internships</a>
+      <a href="#about" id="nav-about">About Us</a>
+      <a href="#faq" id="nav-faq">FAQ</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="banner-tip">
+      <span>ℹ️</span>
+      <span><strong>Slice 10 Practice Form:</strong> Use the Siddarth side panel <strong>Agent</strong> tab and click <em>"Scan & Show Numbered Badges"</em> to overlay badges on all actionable elements.</span>
+    </div>
+
+    <div class="form-card">
+      <h1 class="card-heading">Summer 2026 AI Research Internship Application</h1>
+      <p class="card-subheading">Complete the sections below to apply for our generative agents and browser intelligence engineering team.</p>
+
+      <form id="internship-form" onsubmit="event.preventDefault(); alert('Application submitted successfully!');">
+        <!-- Hidden CSRF token (must NOT be badged) -->
+        <input type="hidden" name="csrfToken" value="sec_token_9981aef42">
+
+        <!-- Invisible / non-rendered elements (must NOT be badged) -->
+        <div style="display: none;">
+          <button id="hidden-btn">Hidden Action</button>
+          <input type="text" id="hidden-text" value="secret">
+        </div>
+        <button style="visibility: hidden;" id="invisible-btn">Invisible</button>
+        <button style="opacity: 0;" id="transparent-btn">Transparent</button>
+        <button style="width: 0; height: 0; padding: 0; border: none;" id="zero-size-btn">Zero</button>
+
+        <!-- Section 1: Candidate Identity -->
+        <div class="form-section">
+          <div class="section-title">1. Personal Information</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="full-name">Full Name</label>
+              <input type="text" id="full-name" name="fullName" placeholder="e.g. John Doe" required>
+            </div>
+            <div class="form-group">
+              <label for="email-address">Email Address</label>
+              <input type="email" id="email-address" name="email" placeholder="john.doe@university.edu" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone-number">Phone Number</label>
+              <input type="tel" id="phone-number" name="phone" placeholder="+1 (555) 000-0000">
+            </div>
+            <div class="form-group">
+              <label for="college-name">College / University</label>
+              <input type="text" id="college-name" name="college" placeholder="e.g. Stanford University">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Academic & Technical Background -->
+        <div class="form-section">
+          <div class="section-title">2. Academic Background & Skills</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="degree-select">Degree Program</label>
+              <select id="degree-select" name="degree">
+                <option value="">Select degree...</option>
+                <option value="btech_cs">B.Tech / B.S. Computer Science</option>
+                <option value="msc_ai">M.S. Artificial Intelligence</option>
+                <option value="phd_ml">Ph.D. Machine Learning</option>
+                <option value="other">Other Engineering / Sciences</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="grad-year">Expected Graduation Year</label>
+              <input type="number" id="grad-year" name="gradYear" min="2025" max="2030" value="2026">
+            </div>
+          </div>
+
+          <!-- Skills checkboxes -->
+          <div class="form-group">
+            <label>Core Technical Skills</label>
+            <div class="checkbox-group">
+              <label class="check-label">
+                <input type="checkbox" name="skills" value="python" id="skill-python" checked> Python
+              </label>
+              <label class="check-label">
+                <input type="checkbox" name="skills" value="javascript" id="skill-javascript"> JavaScript / TypeScript
+              </label>
+              <label class="check-label">
+                <input type="checkbox" name="skills" value="pytorch" id="skill-pytorch"> PyTorch
+              </label>
+              <label class="check-label">
+                <input type="checkbox" name="skills" value="browser_automation" id="skill-browser"> Chrome Extensions / Puppeteer
+              </label>
+            </div>
+          </div>
+
+          <!-- Work authorization radio buttons -->
+          <div class="form-group">
+            <label>Are you authorized to work in India / US?</label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="workAuth" value="yes" id="auth-yes" checked> Yes
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="workAuth" value="no" id="auth-no"> No (Require sponsorship)
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Resume & Experience -->
+        <div class="form-section">
+          <div class="section-title">3. Resume & Statement</div>
+
+          <div class="form-group">
+            <label for="resume-upload">Upload Resume / CV (PDF or DOCX)</label>
+            <input type="file" id="resume-upload" name="resume" accept=".pdf,.doc,.docx">
+          </div>
+
+          <div class="form-group">
+            <label for="statement">Personal Statement & Project Highlights</label>
+            <textarea id="statement" name="statement" placeholder="Describe 1-2 projects where you solved complex systems or ML engineering challenges..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="check-label">
+              <input type="checkbox" id="terms-agree" name="terms" required> I certify that all information provided is accurate and original.
+            </label>
+          </div>
+        </div>
+
+        <!-- Buttons Row -->
+        <div class="button-group">
+          <button type="reset" id="btn-reset-form" class="btn btn-secondary">Clear Form</button>
+          <button type="button" id="btn-save-draft" class="btn btn-primary">Save Draft</button>
+          <!-- Consequential Action Button (triggers warning styling) -->
+          <button type="submit" id="btn-submit-application" class="btn btn-submit">Submit Application</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../../content/scanner.js"></script>
+</body>
+</html>
+
